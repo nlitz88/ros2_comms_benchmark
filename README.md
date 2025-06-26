@@ -77,3 +77,16 @@ I.e., like:
 and so forth. While these should really be diagnostics available on any system
 anyway, I think they would be particularly useful for post-mortem analysis
 systems like this.
+
+Also, should add a callback in the subscriber node for detecting time jumps. If
+the subscriber node ends up using the system clock, which is not gauranteed to
+increase monotonically (because of sporadic time synchronizations via NTP or
+some other mechanism), then it might think there was a big gap in messages, when
+in reality, the system time reference it is using has jumped.
+
+Having said that, I think another part of this analysis should be plotting the
+system time vs time time steps, starting a t=0 based on a monotonic, steady
+count. The system clock should be
+recorded to the /clock topic of a ros bag anyway, so this should be reasonable
+to plot. In addition to the time jump callback, there should be a post
+processing script that creates a time jump vs time plot, or something like that.
