@@ -15,6 +15,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 
+# Benchmark Publisher Component
 add_library(benchmark_publisher_component SHARED src/benchmark_publisher.cpp)
 ament_target_dependencies(
   benchmark_publisher_component 
@@ -33,9 +34,9 @@ target_include_directories(benchmark_publisher_component
 
 
 rclcpp_components_register_node(
-    benchmark_publisher_component
-    PLUGIN "comms_benchmark::BenchmarkPublisher"
-    EXECUTABLE benchmark_publisher
+  benchmark_publisher_component
+  PLUGIN "comms_benchmark::BenchmarkPublisher"
+  EXECUTABLE benchmark_publisher
 )
 
 ament_export_targets(export_benchmark_publisher_component)
@@ -44,6 +45,29 @@ install(TARGETS benchmark_publisher_component
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin
+)
+
+# Benchmark Subscriber Component
+add_library(benchmark_subscriber_component SHARED src/benchmark_subscriber.cpp)
+ament_target_dependencies(
+  benchmark_subscriber_component 
+  rclcpp 
+  rclcpp_components 
+  std_msgs 
+  sensor_msgs 
+  cv_bridge
+  OpenCV
+)
+
+target_include_directories(benchmark_subscriber_component
+  PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
+
+rclcpp_components_register_node(
+  benchmark_subscriber_component
+  PLUGIN "comms_benchmark::BenchmarkSubscriber"
+  EXECUTABLE benchmark_subscriber
 )
 
 # Install launch files.
