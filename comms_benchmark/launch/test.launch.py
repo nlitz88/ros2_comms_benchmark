@@ -26,19 +26,30 @@ def generate_launch_description():
                         }],
                     parameters=[],
                 ),
+                # ComposableNode(
+                #     package='comms_benchmark',
+                #     plugin='comms_benchmark::BenchmarkPublisher',
+                #     name='second_benchmark_publisher',
+                #     extra_arguments=[{
+                #         'use_intra_process_comms': True,
+                #         'output': 'own_log',
+                #         'emulate_tty': False,
+                #         }],
+                #     parameters=[],
+                #     remappings=[
+                #         ('image', 'image2')
+                #     ]
+                # ),
                 ComposableNode(
                     package='comms_benchmark',
-                    plugin='comms_benchmark::BenchmarkPublisher',
-                    name='second_benchmark_publisher',
+                    plugin='comms_benchmark::BenchmarkSubscriber',
+                    name='benchmark_subscriber',
                     extra_arguments=[{
                         'use_intra_process_comms': True,
                         'output': 'own_log',
                         'emulate_tty': False,
                         }],
                     parameters=[],
-                    remappings=[
-                        ('image', 'image2')
-                    ]
                 ),
             ]
         )

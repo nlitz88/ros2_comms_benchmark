@@ -92,6 +92,10 @@ BenchmarkPublisher::~BenchmarkPublisher()
 
 void BenchmarkPublisher::image_timer_callback()
 {
+
+    // TODO: Update this function so that it writes a number to each debug
+    // image and publishes that.
+
     // Update the header timestamp for the image message before publishing.
     this->image_msg_->header.stamp = this->get_clock()->now();
     this->image_publisher_->publish(*(this->image_msg_));

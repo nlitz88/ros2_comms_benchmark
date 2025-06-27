@@ -54,8 +54,8 @@ protected:
      */
     int num_images_received_;
 
-};
+}; // class BenchmarkSubscriber
 
-}
+} // namespace comms_benchmark
 
 #endif // COMMS_BENCHMARK_BENCHMARK_SUBSCRIBER_HPP_
