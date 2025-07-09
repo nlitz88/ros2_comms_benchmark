@@ -14,6 +14,7 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(timing_diagnostics REQUIRED)
 
 # Benchmark Publisher Component
 add_library(benchmark_publisher_component SHARED src/benchmark_publisher.cpp)
@@ -25,6 +26,7 @@ ament_target_dependencies(
   sensor_msgs
   cv_bridge
   OpenCV
+  timing_diagnostics
 )
 
 target_include_directories(benchmark_publisher_component
@@ -56,6 +58,7 @@ ament_target_dependencies(
   sensor_msgs
   cv_bridge
   OpenCV
+  timing_diagnostics
 )
 
 target_include_directories(benchmark_subscriber_component

@@ -13,6 +13,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include "timing_diagnostics/event_timing_diagnostic_task.hpp"
 
 namespace comms_benchmark
 {
@@ -33,6 +34,11 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
 
     // To understand what the placeholder is doing with bind, see this tutorial:
     // https://www.geeksforgeeks.org/bind-function-placeholders-c/
+
+    this->timing_diagnostic_task_ = std::make_shared<timing_diagnostics::EventTimingDiagnosticTask>(
+        this->get_clock(),
+        "BenchmarkSubscriberTimingDiagnosticTask"
+    );
 
 }
 

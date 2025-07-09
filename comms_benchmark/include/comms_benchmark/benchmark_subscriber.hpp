@@ -14,6 +14,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <opencv2/core.hpp>
+#include "timing_diagnostics/event_timing_diagnostic_task.hpp"
 
 namespace comms_benchmark
 {
@@ -53,6 +54,8 @@ protected:
      * @brief Total number of images received.
      */
     int num_images_received_;
+
+    timing_diagnostics::EventTimingDiagnosticTask::SharedPtr timing_diagnostic_task_;
 
 }; // class BenchmarkSubscriber
 
