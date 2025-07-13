@@ -14,13 +14,16 @@
 #include <rclcpp_components/register_node_macro.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include "timing_diagnostics/event_timing_diagnostic_task.hpp"
+#include "comms_benchmark_interfaces/msg/message_timing_diagnostic.hpp"
 
 namespace comms_benchmark
 {
 
 BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options) 
 : Node("benchmark_subscriber", options),
-  num_images_received_(0)
+  num_images_received_(0),
+  last_image_msg_timestamp_s(0),
+  first_image(true)
 {
 
     // TODO: Declare and grab parameters.
@@ -40,6 +43,11 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
         "BenchmarkSubscriberTimingDiagnosticTask"
     );
 
+    this->message_timing_diagnostics_publisher_ = this->create_publisher<comms_benchmark_interfaces::msg::MessageTimingDiagnostic>(
+        "~/message_timing",
+        10
+    );
+
 }
 
 BenchmarkSubscriber::~BenchmarkSubscriber()
@@ -50,6 +58,22 @@ BenchmarkSubscriber::~BenchmarkSubscriber()
 
 void BenchmarkSubscriber::image_callback(const sensor_msgs::msg::Image::SharedPtr image_msg)
 {
+
+    double current_time_s = this->get_clock()->now().seconds();
+    // If this is the first image, just record the last timestamp so we can
+    // compute elapsed time next image.
+    if (first_image == true) {
+        first_image = false;
+        last_image_msg_timestamp_s = current_time_s;
+    }
+    else {        
+        // Publish the current time and elapsed time.
+        comms_benchmark_interfaces::msg::MessageTimingDiagnostic message_timing_diagnostic;
+        message_timing_diagnostic.callback_elapsed_time_s = current_time_s - last_image_msg_timestamp_s;
+        message_timing_diagnostic.message_latency_s = current_time_s - rclcpp::Time(image_msg->header.stamp).seconds();
+        this->message_timing_diagnostics_publisher_->publish(message_timing_diagnostic);
+    }
+    last_image_msg_timestamp_s = current_time_s;
 
     this->num_images_received_++;
     RCLCPP_INFO(this->get_logger(), "Received image %d", this->num_images_received_);

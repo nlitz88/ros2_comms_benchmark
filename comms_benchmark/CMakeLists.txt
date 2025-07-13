@@ -12,6 +12,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(comms_benchmark_interfaces)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(timing_diagnostics REQUIRED)
@@ -56,6 +57,7 @@ ament_target_dependencies(
   rclcpp_components
   std_msgs
   sensor_msgs
+  comms_benchmark_interfaces
   cv_bridge
   OpenCV
   timing_diagnostics

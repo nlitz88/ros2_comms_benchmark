@@ -13,6 +13,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include "diagnostic_updater/diagnostic_updater.hpp"
+#include "diagnostic_msgs/msg/diagnostic_status.hpp"
 
 namespace timing_diagnostics
 {
@@ -33,8 +34,8 @@ public:
         const std::string & name);
 
     virtual void run(diagnostic_updater::DiagnosticStatusWrapper & stat) override;
-
-
+    
+    void log_event(const std::string & event_name);
 
 // TODO: Declare methods for logging events.
 
@@ -46,12 +47,19 @@ public:
 
 private:
 
-    // Define a map to map different event names to their respective event times.
-    // The actual event times will be maintained as a vector
-    // DiagnosticStatusWrappers or messages, or something like that.
-
-    // Define a clock to use for timing events.
+    /**
+     * @brief Pointer to the clock that will be used to record the times an
+     * event takes place.
+     */
     rclcpp::Clock::SharedPtr clock_;
+    
+    /**
+     * @brief Map of event name strings to their corresponding event
+     * diagnostics. Each event will have a vector of DiagnosticStatus messages,
+     * where a new DiagnosticStatus message will be created/recorded for each
+     * call to log_event() with that event's name.
+     */
+    std::map<std::string, std::vector<diagnostic_msgs::msg::DiagnosticStatus>> events_;
 
 }; // class EventTimingDiagnosticTask
 

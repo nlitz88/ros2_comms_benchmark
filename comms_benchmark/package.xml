@@ -16,6 +16,7 @@
   <depend>rclcpp_components</depend>
   <depend>std_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>comms_benchmark_interfaces</depend>
   <depend>vision_opencv</depend>
   <depend>cv_bridge</depend>
   <depend>libopencv-dev</depend>
