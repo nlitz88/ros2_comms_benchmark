@@ -15,6 +15,7 @@
 #include <sensor_msgs/msg/image.hpp>
 #include "timing_diagnostics/event_timing_diagnostic_task.hpp"
 #include "comms_benchmark_interfaces/msg/message_timing_diagnostic.hpp"
+#include <rclcpp/qos_overriding_options.hpp>
 
 namespace comms_benchmark
 {
@@ -43,9 +44,17 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
         "BenchmarkSubscriberTimingDiagnosticTask"
     );
 
+    rclcpp::PublisherOptions publisher_options;
+    // publisher_options.qos_overriding_options = rclcpp::QosOverridingOptions::with_default_policies();
+    publisher_options.qos_overriding_options = rclcpp::QosOverridingOptions({
+        // rclcpp::QosPolicyKind::Depth,
+        rclcpp::QosPolicyKind::Reliability
+    });
+
     this->message_timing_diagnostics_publisher_ = this->create_publisher<comms_benchmark_interfaces::msg::MessageTimingDiagnostic>(
         "~/message_timing",
-        10
+        rclcpp::QoS(10).reliable(), // Default QoS
+        publisher_options
     );
 
 }
@@ -66,7 +75,7 @@ void BenchmarkSubscriber::image_callback(const sensor_msgs::msg::Image::SharedPt
         first_image = false;
         last_image_msg_timestamp_s = current_time_s;
     }
-    else {        
+    else {
         // Publish the current time and elapsed time.
         comms_benchmark_interfaces::msg::MessageTimingDiagnostic message_timing_diagnostic;
         message_timing_diagnostic.callback_elapsed_time_s = current_time_s - last_image_msg_timestamp_s;
