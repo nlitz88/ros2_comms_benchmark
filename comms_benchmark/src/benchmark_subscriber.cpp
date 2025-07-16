@@ -58,9 +58,16 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
         rclcpp::QosPolicyKind::Reliability
     });
 
+    /**
+     * @brief Explicitly define an initial QOS profile to use for publishers and
+     * subscribers, in case their individual policies are not configured through
+     * their parameters. This sets will keep the last 10 messages, and will use
+     * the default QOS policies (reliable).
+     */
+    rclcpp::QoS initial_qos = rclcpp::QoS(rclcpp::KeepLast(10), rmw_qos_profile_default);
     this->message_timing_diagnostics_publisher_ = this->create_publisher<comms_benchmark_interfaces::msg::MessageTimingDiagnostic>(
         "~/message_timing",
-        rclcpp::QoS(10).reliable(), // Default QoS
+        initial_qos,
         publisher_options
     );
 
