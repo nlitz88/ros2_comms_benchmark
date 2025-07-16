@@ -55,7 +55,6 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
         rclcpp::QosPolicyKind::Depth,
         rclcpp::QosPolicyKind::Reliability,
         rclcpp::QosPolicyKind::Durability,
-        rclcpp::QosPolicyKind::History,
         rclcpp::QosPolicyKind::Reliability
     });
 
