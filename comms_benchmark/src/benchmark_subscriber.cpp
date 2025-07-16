@@ -27,9 +27,6 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
   first_image(true)
 {
 
-    // TODO: Declare and grab parameters.
-
-
     /**
      * @brief Explicitly define an initial QOS profile to use for publishers and
      * subscribers, in case their individual policies are not configured through
