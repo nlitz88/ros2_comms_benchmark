@@ -29,10 +29,21 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
 
     // TODO: Declare and grab parameters.
 
-    // TODO: Create a new subscriber instance.
+
+    /**
+     * @brief Explicitly define an initial QOS profile to use for publishers and
+     * subscribers, in case their individual policies are not configured through
+     * their parameters. This sets will keep the last 10 messages, and will use
+     * the default QOS policies (reliable).
+     */
+    rclcpp::QoS initial_qos = rclcpp::QoS(rclcpp::KeepLast(10), rmw_qos_profile_default);
+
+    /**
+     * @brief Create a new image subscriber.
+     */
     this->image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
         "image",
-        10,
+        initial_qos,
         std::bind(&BenchmarkSubscriber::image_callback, this, std::placeholders::_1)
     );
 
@@ -44,11 +55,9 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
         "BenchmarkSubscriberTimingDiagnosticTask"
     );
 
-
     /**
      * @brief Setup publisher options. Specifically, make the key QOS policies
      * configurable.
-     * 
      */
     rclcpp::PublisherOptions publisher_options;
     publisher_options.qos_overriding_options = rclcpp::QosOverridingOptions({
@@ -59,12 +68,8 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
     });
 
     /**
-     * @brief Explicitly define an initial QOS profile to use for publishers and
-     * subscribers, in case their individual policies are not configured through
-     * their parameters. This sets will keep the last 10 messages, and will use
-     * the default QOS policies (reliable).
+     * @brief Create a new publisher with the options configured above.
      */
-    rclcpp::QoS initial_qos = rclcpp::QoS(rclcpp::KeepLast(10), rmw_qos_profile_default);
     this->message_timing_diagnostics_publisher_ = this->create_publisher<comms_benchmark_interfaces::msg::MessageTimingDiagnostic>(
         "~/message_timing",
         initial_qos,
