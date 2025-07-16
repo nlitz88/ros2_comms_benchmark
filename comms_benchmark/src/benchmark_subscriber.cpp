@@ -44,10 +44,18 @@ BenchmarkSubscriber::BenchmarkSubscriber(const rclcpp::NodeOptions & options)
         "BenchmarkSubscriberTimingDiagnosticTask"
     );
 
+
+    /**
+     * @brief Setup publisher options. Specifically, make the key QOS policies
+     * configurable.
+     * 
+     */
     rclcpp::PublisherOptions publisher_options;
-    // publisher_options.qos_overriding_options = rclcpp::QosOverridingOptions::with_default_policies();
     publisher_options.qos_overriding_options = rclcpp::QosOverridingOptions({
-        // rclcpp::QosPolicyKind::Depth,
+        rclcpp::QosPolicyKind::Depth,
+        rclcpp::QosPolicyKind::Reliability,
+        rclcpp::QosPolicyKind::Durability,
+        rclcpp::QosPolicyKind::History,
         rclcpp::QosPolicyKind::Reliability
     });
 
