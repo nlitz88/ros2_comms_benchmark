@@ -29,7 +29,7 @@ target_include_directories(event_timing_diagnostic_task
 
 # Do we need to separately install the include directory?
 install(
-  DIRECTORY include/timing_diagnostics
+  DIRECTORY include/
   DESTINATION include
 )
 

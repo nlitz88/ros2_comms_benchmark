@@ -47,6 +47,7 @@ install(TARGETS benchmark_publisher_component
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
 )
 
 # Benchmark Subscriber Component
@@ -80,12 +81,19 @@ install(TARGETS benchmark_subscriber_component
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
 )
 
 # Install launch files.
 install(DIRECTORY
   launch
   DESTINATION share/${PROJECT_NAME}/
+)
+
+# Install all package header files.
+install(
+  DIRECTORY include/
+  DESTINATION include
 )
 
 if(BUILD_TESTING)
