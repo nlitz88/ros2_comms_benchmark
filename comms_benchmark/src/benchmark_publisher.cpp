@@ -14,7 +14,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
 #include <sensor_msgs/msg/image.hpp>
-#include <cv_bridge/cv_bridge.hpp>
+#include <cv_bridge/cv_bridge.h>
 #include <opencv2/core.hpp>
 
 namespace comms_benchmark
@@ -59,8 +59,12 @@ BenchmarkPublisher::BenchmarkPublisher(const rclcpp::NodeOptions & options)
     // this, as if we're using sim time, we want our timer to operate on the
     // same time scale as the rest of the system.
     // Compute the timer period based on the provided publish rate.
+    // https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/create_timer.hpp#L36-L52
     int publish_period_ms = static_cast<int>((1.0 / publish_rate_hz) * 1000);
-    this->image_timer_ = create_timer(
+    this->image_timer_ = rclcpp::create_timer(
+        this->get_node_base_interface(),
+        this->get_node_timers_interface(),
+        this->get_clock(),
         std::chrono::milliseconds(publish_period_ms),
         std::bind(&BenchmarkPublisher::image_timer_callback, this)
     );
